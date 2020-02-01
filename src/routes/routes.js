@@ -5,6 +5,7 @@ const userController = require("../app/controllers/userController");
 const providerController = require("../app/controllers/providerController");
 const authController = require("../app/controllers/authController");
 const authMiddleware = require("../app/middlewares/auth");
+const searchProvider = require("../app/controllers/searchProvider");
 
 router.get("/", (req, res) => {
   return res.send({
@@ -23,6 +24,9 @@ router.post("/provider", providerController.store);
 router.get("/provider", providerController.index);
 router.delete("/provider", authMiddleware, providerController.delete);
 router.patch("/provider", authMiddleware, providerController.update);
+
+// Buscar Provedores
+router.post("/search", authMiddleware, searchProvider.index);
 
 // * Authentication
 router.post("/login", authController.login);
