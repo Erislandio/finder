@@ -29,7 +29,8 @@ module.exports = {
       email,
       latitude,
       longitude,
-      password
+      password,
+      image
     } = req.body;
 
     try {
@@ -48,6 +49,7 @@ module.exports = {
           email,
           phone,
           password,
+          image,
           location
         });
 
@@ -99,7 +101,7 @@ module.exports = {
     }
   },
   async update(req, res) {
-    const { name, lastname, phone, email, newEmail } = req.body;
+    const { name, lastname, phone, email, newEmail, image } = req.body;
 
     UserModel.findOneAndUpdate(
       { email },
@@ -107,7 +109,8 @@ module.exports = {
         email: newEmail,
         name,
         lastname,
-        phone
+        phone,
+        image
       }
     ).then(async () => {
       const newUser = await UserModel.findOne({

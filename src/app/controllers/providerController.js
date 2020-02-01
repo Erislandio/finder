@@ -29,7 +29,9 @@ module.exports = {
       email,
       latitude,
       longitude,
-      password
+      password,
+      image,
+      banner
     } = req.body;
 
     try {
@@ -48,7 +50,9 @@ module.exports = {
           email,
           phone,
           password,
-          location
+          location,
+          image,
+          banner
         });
 
         return res.json(newProvider);
@@ -92,14 +96,16 @@ module.exports = {
     }
   },
   async update(req, res) {
-    const { name, phone, email, newEmail } = req.body;
+    const { name, phone, email, newEmail, image, banner } = req.body;
 
     ProviderModel.findOneAndUpdate(
       { email },
       {
         email: newEmail,
         name,
-        phone
+        phone,
+        image,
+        banner
       }
     ).then(async () => {
       const newProvider = await ProviderModel.findOne({

@@ -6,6 +6,9 @@ const providerController = require("../app/controllers/providerController");
 const authController = require("../app/controllers/authController");
 const authMiddleware = require("../app/middlewares/auth");
 const searchProvider = require("../app/controllers/searchProvider");
+const multerConfig = require("../config/multer");
+const multer = require("multer");
+const fileController = require("../app/controllers/fileController");
 
 router.get("/", (req, res) => {
   return res.send({
@@ -30,5 +33,7 @@ router.post("/search", authMiddleware, searchProvider.index);
 
 // * Authentication
 router.post("/login", authController.login);
+
+router.post("/file", multer(multerConfig).single("file"), fileController.store);
 
 module.exports = router;

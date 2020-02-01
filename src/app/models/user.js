@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const PointSchema = require("./utils/pointerSchema");
-const bcrypt = require('bcryptjs')
+const bcrypt = require("bcryptjs");
 
 const UserSchema = new mongoose.Schema({
   name: {
@@ -34,6 +34,9 @@ const UserSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now
+  },
+  image: {
+    type: String
   }
 });
 
