@@ -29,8 +29,7 @@ module.exports = {
       email,
       latitude,
       longitude,
-      password,
-      banner
+      password
     } = req.body;
 
     try {
