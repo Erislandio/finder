@@ -1,6 +1,25 @@
 const UserModel = require("../models/user");
 
 module.exports = {
+  async index(req, res) {
+    const { email } = req.body;
+
+    try {
+      const user = await UserModel.findOne({ email });
+
+      if (!user) {
+        return res.json({
+          error: true,
+          message: `Email: ${email} not found `
+        });
+      }
+
+      return res.json(user);
+    } catch (error) {
+      return res.json(error);
+    }
+  },
+
   async store(req, res) {
     const {
       name,
@@ -9,25 +28,38 @@ module.exports = {
       phone,
       email,
       latitude,
-      longitude
+      longitude,
+      password
     } = req.body;
 
-    const user = await UserModel.findOne({ email });
+    try {
+      const user = await UserModel.findOne({ email });
 
-    const location = {
-      type: "Point",
-      coordinates: [longitude, latitude]
-    };
+      const location = {
+        type: "Point",
+        coordinates: [longitude, latitude]
+      };
 
-    if (!user) {
-      const newUser = await UserModel.create({
-        name,
-        lastname,
-        document,
-        email,
-        phone,
-        location
+      if (!user) {
+        const newUser = await UserModel.create({
+          name,
+          lastname,
+          document,
+          email,
+          phone,
+          password,
+          location
+        });
+
+        return res.json(newUser);
+      }
+
+      return res.json({
+        error: true,
+        message: "User already registered"
       });
+    } catch (error) {
+      return res.json(error);
     }
   }
 };
