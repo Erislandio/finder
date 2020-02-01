@@ -1,5 +1,5 @@
 const UserModel = require("../models/user");
-
+const { findConnections, sendMessage } = require("../../websocket");
 module.exports = {
   async index(req, res) {
     const { email } = req.body;
@@ -50,6 +50,13 @@ module.exports = {
           password,
           location
         });
+
+        const sendSocketMessageTo = findConnections(
+          { latitude, longitude },
+          techsArray
+        );
+
+        sendMessage(sendSocketMessageTo, "new-user", dev);
 
         return res.json(newUser);
       }

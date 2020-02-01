@@ -5,10 +5,16 @@ const port = process.env.PORT || 3000;
 const routes = require("./routes/routes");
 const db = require("./database/db");
 const chalk = require("chalk");
+const http = require("http");
+
+app.use(routes);
+const { setupWebsocket } = require("./websocket");
+
+const server = http.Server(app);
+setupWebsocket(server);
 
 app.use(express.json());
 app.use(cors());
-app.use(routes);
 
 app.listen(port, () => {
   console.log(
