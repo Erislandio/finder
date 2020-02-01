@@ -1,7 +1,8 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const UserSchema = require("../models/user");
-const authConfig = require('../../config/auth.json')
+const authConfig = require("../../config/auth.json");
+const ProviderSchema = require("../models/provider");
 
 function generateToken(params = {}) {
   return jwt.sign(params, authConfig.secret, {
@@ -11,18 +12,19 @@ function generateToken(params = {}) {
 
 module.exports = {
   async login(req, res) {
-    const { email, password } = req.body;
+    const { email, password, provider } = req.body;
 
     try {
-      const user = await UserSchema.findOne({ email }).select('+password');
+      const user = provider
+        ? await ProviderSchema.findOne({ email }).select("+password")
+        : await UserSchema.findOne({ email }).select("+password");
 
       if (!user) {
         return res.json({
           error: true,
-          message: `User with email: ${email} not exists`
+          message: `email: ${email} not exists`
         });
       }
-
 
       if (!(await bcrypt.compare(password, user.password)))
         return res.json({
