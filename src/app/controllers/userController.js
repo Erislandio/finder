@@ -61,5 +61,20 @@ module.exports = {
     } catch (error) {
       return res.json(error);
     }
+  },
+  async delete(req, res) {
+    const { email } = req.body;
+
+    try {
+      UserModel.findByIdAndDelete({ email })
+        .then(deleted => {
+          return res.json(deleted);
+        })
+        .catch(err => {
+          return res.json(err);
+        });
+    } catch (error) {
+      return res.json(error);
+    }
   }
 };
