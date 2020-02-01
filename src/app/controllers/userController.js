@@ -68,8 +68,6 @@ module.exports = {
     try {
       const user = UserModel.findOne({ email });
 
-      console.log(user)
-
       if (!user) {
         return res.status(400).json({
           error: true,
@@ -96,7 +94,7 @@ module.exports = {
   async update(req, res) {
     const { name, lastname, phone, email, newEmail } = req.body;
 
-    UserModel.findByIdAndUpdate(
+    UserModel.findOneAndUpdate(
       { email },
       {
         email: newEmail,
@@ -104,8 +102,14 @@ module.exports = {
         lastname,
         phone
       }
-    ).then(updated => {
-      return res.json(updated);
+    ).then(async () => {
+      const newUser = await UserModel.findOne({
+        email: newEmail
+      });
+
+      console.log(newUser);
+
+      return res.json(newUser);
     });
 
     try {
