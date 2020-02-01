@@ -40,6 +40,8 @@ module.exports = {
         coordinates: [longitude, latitude]
       };
 
+      console.log(provider);
+
       if (!provider) {
         const newProvider = await ProviderModel.create({
           name,
@@ -50,6 +52,8 @@ module.exports = {
           password,
           location
         });
+
+        console.log(newProvider);
 
         return res.json(newProvider);
       }
