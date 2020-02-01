@@ -66,15 +66,51 @@ module.exports = {
     const { email } = req.body;
 
     try {
-      UserModel.findByIdAndDelete({ email })
+      const user = UserModel.findOne({ email });
+
+      console.log(user)
+
+      if (!user) {
+        return res.status(400).json({
+          error: true,
+          message: `User with email: ${email} not exists`
+        });
+      }
+
+      user
+        .remove()
         .then(deleted => {
-          return res.json(deleted);
+          return res.json({
+            deleted: true,
+            message: `User with email: ${email} has been successfully removed`,
+            info: deleted
+          });
         })
         .catch(err => {
-          return res.json(err);
+          return res.status(400).json(err);
         });
     } catch (error) {
       return res.json(error);
+    }
+  },
+  async update(req, res) {
+    const { name, lastname, phone, email, newEmail } = req.body;
+
+    UserModel.findByIdAndUpdate(
+      { email },
+      {
+        email: newEmail,
+        name,
+        lastname,
+        phone
+      }
+    ).then(updated => {
+      return res.json(updated);
+    });
+
+    try {
+    } catch (error) {
+      return res.status(500).json(error);
     }
   }
 };
