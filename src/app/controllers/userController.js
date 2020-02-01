@@ -101,7 +101,7 @@ module.exports = {
     }
   },
   async update(req, res) {
-    const { name, lastname, phone, email, newEmail, image } = req.body;
+    const { name, lastname, phone, email, newEmail } = req.body;
 
     UserModel.findOneAndUpdate(
       { email },
@@ -109,8 +109,7 @@ module.exports = {
         email: newEmail,
         name,
         lastname,
-        phone,
-        image
+        phone
       }
     ).then(async () => {
       const newUser = await UserModel.findOne({
@@ -123,6 +122,29 @@ module.exports = {
     });
 
     try {
+    } catch (error) {
+      return res.status(500).json(error);
+    }
+  },
+  async updateImage(req, res) {
+    const { email, image } = req.body;
+
+    try {
+      const user = UserModel.findOne({ email });
+      if (!user) {
+        return res.status(400).json({
+          error: true,
+          message: `User with email: ${email} not exists`
+        });
+      }
+
+      await user.update({
+        image
+      });
+
+      const userUpdated = await UserModel.findOne({ email });
+
+      return res.json(userUpdated);
     } catch (error) {
       return res.status(500).json(error);
     }

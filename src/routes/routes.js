@@ -21,12 +21,19 @@ router.post("/user", userController.store);
 router.get("/user", userController.index);
 router.delete("/user", authMiddleware, userController.delete);
 router.patch("/user", authMiddleware, userController.update);
+router.patch("/user/image", authMiddleware, userController.updateImage);
 
 // Provider
 router.post("/provider", providerController.store);
 router.get("/provider", providerController.index);
 router.delete("/provider", authMiddleware, providerController.delete);
 router.patch("/provider", authMiddleware, providerController.update);
+router.patch(
+  "/provider/banner",
+  authMiddleware,
+  providerController.updateBanner
+);
+router.patch("/provider/image", authMiddleware, providerController.updateImage);
 
 // Buscar Provedores
 router.post("/search", authMiddleware, searchProvider.index);
@@ -34,6 +41,11 @@ router.post("/search", authMiddleware, searchProvider.index);
 // * Authentication
 router.post("/login", authController.login);
 
-router.post("/file", multer(multerConfig).single("file"), fileController.store);
+router.post(
+  "/file",
+  authMiddleware,
+  multer(multerConfig).single("file"),
+  fileController.store
+);
 
 module.exports = router;

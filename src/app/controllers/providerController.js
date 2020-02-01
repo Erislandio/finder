@@ -30,7 +30,6 @@ module.exports = {
       latitude,
       longitude,
       password,
-      image,
       banner
     } = req.body;
 
@@ -50,9 +49,7 @@ module.exports = {
           email,
           phone,
           password,
-          location,
-          image,
-          banner
+          location
         });
 
         return res.json(newProvider);
@@ -96,16 +93,14 @@ module.exports = {
     }
   },
   async update(req, res) {
-    const { name, phone, email, newEmail, image, banner } = req.body;
+    const { name, phone, email, newEmail } = req.body;
 
     ProviderModel.findOneAndUpdate(
       { email },
       {
         email: newEmail,
         name,
-        phone,
-        image,
-        banner
+        phone
       }
     ).then(async () => {
       const newProvider = await ProviderModel.findOne({
@@ -116,6 +111,54 @@ module.exports = {
     });
 
     try {
+    } catch (error) {
+      return res.status(500).json(error);
+    }
+  },
+  async updateBanner(req, res) {
+    const { email, banner } = req.body;
+
+    try {
+      const provider = await ProviderModel.findOne({ email });
+
+      if (!provider) {
+        return res.json({
+          error: true,
+          message: `Provider: ${email} not found `
+        });
+      }
+
+      await provider.update({
+        banner
+      });
+
+      const providerUpdated = await ProviderModel.findOne({ email });
+
+      return res.json(providerUpdated);
+    } catch (error) {
+      return res.status(500).json(error);
+    }
+  },
+  async updateImage(req, res) {
+    const { email, image } = req.body;
+
+    try {
+      const provider = await ProviderModel.findOne({ email });
+
+      if (!provider) {
+        return res.json({
+          error: true,
+          message: `Provider: ${email} not found `
+        });
+      }
+
+      await provider.update({
+        image
+      });
+
+      const providerUpdated = await ProviderModel.findOne({ email });
+
+      return res.json(providerUpdated);
     } catch (error) {
       return res.status(500).json(error);
     }
