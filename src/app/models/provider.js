@@ -41,7 +41,8 @@ const ProviderSchema = new mongoose.Schema({
   },
   banner: {
     type: String
-  }
+  },
+  assessments: []
 });
 
 ProviderSchema.pre("save", async function(next) {

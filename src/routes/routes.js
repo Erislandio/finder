@@ -1,5 +1,6 @@
 const { Router } = require("express");
 const router = Router();
+const multer = require("multer");
 
 const userController = require("../app/controllers/userController");
 const providerController = require("../app/controllers/providerController");
@@ -7,8 +8,8 @@ const authController = require("../app/controllers/authController");
 const authMiddleware = require("../app/middlewares/auth");
 const searchProvider = require("../app/controllers/searchProvider");
 const multerConfig = require("../config/multer");
-const multer = require("multer");
 const fileController = require("../app/controllers/fileController");
+const postController = require("../app/controllers/postController");
 
 router.get("/", (req, res) => {
   return res.send({
@@ -37,6 +38,13 @@ router.patch("/provider/image", authMiddleware, providerController.updateImage);
 
 // Buscar Provedores
 router.post("/search", authMiddleware, searchProvider.index);
+
+// comentários e posts
+
+router.get("/provider/posts", authMiddleware, postController.indexByProviderId);
+router.post("/provider/post", authMiddleware, postController.store);
+router.patch("/provider/post", authMiddleware, postController.update);
+router.delete("/provider/post", authMiddleware, postController.delete);
 
 // * Authentication
 router.post("/login", authController.login);
