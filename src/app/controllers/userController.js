@@ -42,8 +42,7 @@ module.exports = {
           email,
           phone,
           password,
-          image,
-          location
+          image
         });
 
         return res.status(200).json(newUser);
