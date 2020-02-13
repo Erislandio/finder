@@ -1,5 +1,5 @@
 const UserModel = require("../models/user");
-const { findConnections, sendMessage } = require("../../websocket");
+
 module.exports = {
   async index(req, res) {
     const { email } = req.body;
@@ -8,15 +8,15 @@ module.exports = {
       const user = await UserModel.findOne({ email });
 
       if (!user) {
-        return res.json({
+        return res.status(400).json({
           error: true,
           message: `Email: ${email} not found `
         });
       }
 
-      return res.json(user);
+      return res.status(200).json(user);
     } catch (error) {
-      return res.json(error);
+      return res.status(500).json(error);
     }
   },
 
@@ -27,19 +27,12 @@ module.exports = {
       document,
       phone,
       email,
-      latitude,
-      longitude,
       password,
       image
     } = req.body;
 
     try {
       const user = await UserModel.findOne({ email });
-
-      const location = {
-        type: "Point",
-        coordinates: [longitude, latitude]
-      };
 
       if (!user) {
         const newUser = await UserModel.create({
@@ -53,22 +46,15 @@ module.exports = {
           location
         });
 
-        const sendSocketMessageTo = findConnections(
-          { latitude, longitude },
-          techsArray
-        );
-
-        sendMessage(sendSocketMessageTo, "new-user", dev);
-
-        return res.json(newUser);
+        return res.status(200).json(newUser);
       }
 
-      return res.json({
+      return res.status(400).json({
         error: true,
         message: "User already registered"
       });
     } catch (error) {
-      return res.json(error);
+      return res.status(500).json(error);
     }
   },
   async delete(req, res) {
@@ -87,7 +73,7 @@ module.exports = {
       user
         .remove()
         .then(deleted => {
-          return res.json({
+          return res.status(201).json({
             deleted: true,
             message: `User with email: ${email} has been successfully removed`,
             info: deleted
@@ -97,7 +83,7 @@ module.exports = {
           return res.status(400).json(err);
         });
     } catch (error) {
-      return res.json(error);
+      return res.status(500).json(error);
     }
   },
   async update(req, res) {
@@ -111,15 +97,21 @@ module.exports = {
         lastname,
         phone
       }
-    ).then(async () => {
-      const newUser = await UserModel.findOne({
-        email: newEmail
+    )
+      .then(async () => {
+        const newUser = await UserModel.findOne({
+          email: newEmail
+        });
+
+        return res.status(200).json(newUser);
+      })
+      .catch(err => {
+        return res.status(400).json({
+          error: true,
+          err,
+          message: "The user could not be updated at this time"
+        });
       });
-
-      console.log(newUser);
-
-      return res.json(newUser);
-    });
 
     try {
     } catch (error) {
@@ -144,7 +136,7 @@ module.exports = {
 
       const userUpdated = await UserModel.findOne({ email });
 
-      return res.json(userUpdated);
+      return res.status(200).json(userUpdated);
     } catch (error) {
       return res.status(500).json(error);
     }

@@ -38,6 +38,7 @@ router.patch("/provider/image", authMiddleware, providerController.updateImage);
 
 // Buscar Provedores
 router.post("/search", authMiddleware, searchProvider.index);
+router.post("/search/type", authMiddleware, searchProvider.searchByType);
 
 // comentários e posts
 

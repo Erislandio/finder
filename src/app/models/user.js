@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const PointSchema = require("./utils/pointerSchema");
 const bcrypt = require("bcryptjs");
 
 const UserSchema = new mongoose.Schema({
@@ -26,10 +25,6 @@ const UserSchema = new mongoose.Schema({
     type: String,
     select: false,
     required: true
-  },
-  location: {
-    type: PointSchema,
-    index: "2dsphere"
   },
   createdAt: {
     type: Date,

@@ -42,6 +42,11 @@ const ProviderSchema = new mongoose.Schema({
   banner: {
     type: String
   },
+  type: {
+    type: String,
+    enum: ["Mecânica", "Moto Taxi", "Borracharia", "Outros"],
+    required: true
+  },
   assessments: []
 });
 

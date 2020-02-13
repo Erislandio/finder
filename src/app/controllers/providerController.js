@@ -8,15 +8,15 @@ module.exports = {
       const provider = await ProviderModel.findOne({ email });
 
       if (!provider) {
-        return res.json({
+        return res.status(400).json({
           error: true,
           message: `Provider: ${email} not found `
         });
       }
 
-      return res.json(provider);
+      return res.status(200).json(provider);
     } catch (error) {
-      return res.json(error);
+      return res.status(500).json(error);
     }
   },
 
@@ -29,15 +29,19 @@ module.exports = {
       email,
       latitude,
       longitude,
-      password
+      password,
+      type
     } = req.body;
 
     try {
       const provider = await ProviderModel.findOne({ email });
 
+      const lat = latitude ? latitude : 0;
+      const lon = longitude ? longitude : 0;
+
       const location = {
         type: "Point",
-        coordinates: [longitude, latitude]
+        coordinates: [lon, lat]
       };
 
       if (!provider) {
@@ -48,18 +52,19 @@ module.exports = {
           email,
           phone,
           password,
-          location
+          location,
+          type
         });
 
-        return res.json(newProvider);
+        return res.status(201).json(newProvider);
       }
 
-      return res.json({
+      return res.status(400).json({
         error: true,
         message: "Provider already registered"
       });
     } catch (error) {
-      return res.json(error);
+      return res.status(500).json(error);
     }
   },
   async delete(req, res) {
@@ -78,7 +83,7 @@ module.exports = {
       provider
         .remove()
         .then(deleted => {
-          return res.json({
+          return res.status(201).json({
             deleted: true,
             message: `Provider with email: ${email} has been successfully removed`,
             info: deleted
@@ -88,28 +93,35 @@ module.exports = {
           return res.status(400).json(err);
         });
     } catch (error) {
-      return res.json(error);
+      return res.status(500).json(error);
     }
   },
   async update(req, res) {
     const { name, phone, email, newEmail } = req.body;
 
-    ProviderModel.findOneAndUpdate(
-      { email },
-      {
-        email: newEmail,
-        name,
-        phone
-      }
-    ).then(async () => {
-      const newProvider = await ProviderModel.findOne({
-        email: newEmail
-      });
-
-      return res.json(newProvider);
-    });
-
     try {
+      ProviderModel.findOneAndUpdate(
+        { email },
+        {
+          email: newEmail,
+          name,
+          phone
+        }
+      )
+        .then(async () => {
+          const newProvider = await ProviderModel.findOne({
+            email: newEmail
+          });
+
+          return res.status(201).json(newProvider);
+        })
+        .catch(err => {
+          return res.status(400).json({
+            error: true,
+            err,
+            message: "The provider could not be updated at this time"
+          });
+        });
     } catch (error) {
       return res.status(500).json(error);
     }
@@ -121,7 +133,7 @@ module.exports = {
       const provider = await ProviderModel.findOne({ email });
 
       if (!provider) {
-        return res.json({
+        return res.status(400).json({
           error: true,
           message: `Provider: ${email} not found `
         });
@@ -133,7 +145,7 @@ module.exports = {
 
       const providerUpdated = await ProviderModel.findOne({ email });
 
-      return res.json(providerUpdated);
+      return res.status(200).json(providerUpdated);
     } catch (error) {
       return res.status(500).json(error);
     }
@@ -145,7 +157,7 @@ module.exports = {
       const provider = await ProviderModel.findOne({ email });
 
       if (!provider) {
-        return res.json({
+        return res.status(400).json({
           error: true,
           message: `Provider: ${email} not found `
         });
@@ -157,7 +169,7 @@ module.exports = {
 
       const providerUpdated = await ProviderModel.findOne({ email });
 
-      return res.json(providerUpdated);
+      return res.status(201).json(providerUpdated);
     } catch (error) {
       return res.status(500).json(error);
     }

@@ -8,7 +8,7 @@ module.exports = {
     try {
       const provider = await Provider.findById(id);
 
-      return res.json(provider.assessments);
+      return res.status(200).json(provider.assessments);
     } catch (error) {
       return res.status(500).json({
         error: true,
