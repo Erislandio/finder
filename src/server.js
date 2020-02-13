@@ -8,7 +8,6 @@ const chalk = require("chalk");
 const http = require("http");
 const path = require("path");
 const morgan = require("morgan");
-const authMiddleware = require("./app/middlewares/auth");
 
 const { setupWebsocket } = require("./websocket");
 
@@ -21,7 +20,6 @@ app.use(cors());
 app.use(morgan("dev"));
 app.use(
   "/files",
-  authMiddleware,
   express.static(path.resolve(__dirname, "..", "tmp", "uploads"))
 );
 app.use(routes);
