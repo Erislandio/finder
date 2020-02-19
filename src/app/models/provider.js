@@ -44,7 +44,14 @@ const ProviderSchema = new mongoose.Schema({
   },
   type: {
     type: String,
-    enum: ["Mecânica", "Moto Taxi", "Borracharia", "Outros"],
+    enum: [
+      "Mecânica",
+      "Moto Taxi",
+      "Borracharia",
+      "Outros",
+      "Manicure",
+      "Cabeleireiro"
+    ],
     required: true
   },
   assessments: []
