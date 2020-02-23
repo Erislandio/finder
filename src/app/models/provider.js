@@ -52,7 +52,11 @@ const ProviderSchema = new mongoose.Schema({
       "Manicure e pedicure",
       "Cabeleireiro",
       "Restaurante",
-      "Supermercado"
+      "Supermercado",
+      "Pedreiro",
+      "Encanador",
+      "Carpinteiro",
+      "Pintor"
     ],
     required: true
   },
