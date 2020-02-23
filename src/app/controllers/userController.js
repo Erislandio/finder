@@ -33,8 +33,10 @@ module.exports = {
 
     try {
       const user = await UserModel.findOne({ email });
+      const userDocument = await UserModel.findOne({ document });
+      const userPhone = await UserModel.findOne({ phone });
 
-      if (!user) {
+      if (!user && !userPhone && !userDocument) {
         const newUser = await UserModel.create({
           name,
           lastname,
@@ -53,7 +55,10 @@ module.exports = {
         message: "User already registered"
       });
     } catch (error) {
-      return res.status(500).json(error);
+      return res.status(500).json({
+        error: true,
+        message: "User already registered"
+      });
     }
   },
   async delete(req, res) {

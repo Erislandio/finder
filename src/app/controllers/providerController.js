@@ -35,6 +35,8 @@ module.exports = {
 
     try {
       const provider = await ProviderModel.findOne({ email });
+      const providerDocument = await ProviderModel.findOne({ document });
+      const providerPhone = await ProviderModel.findOne({ phone });
 
       const lat = latitude ? latitude : 0;
       const lon = longitude ? longitude : 0;
@@ -44,7 +46,7 @@ module.exports = {
         coordinates: [lon, lat]
       };
 
-      if (!provider) {
+      if (!provider && !providerDocument && !providerPhone) {
         const newProvider = await ProviderModel.create({
           name,
           fancyName,
