@@ -10,7 +10,7 @@ module.exports = {
       if (!user) {
         return res.status(400).json({
           error: true,
-          message: `Email: ${email} not found `
+          message: `Email: ${id} not found `
         });
       }
 
