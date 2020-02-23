@@ -2,10 +2,10 @@ const UserModel = require("../models/user");
 
 module.exports = {
   async index(req, res) {
-    const { email } = req.body;
+    const { id } = req.body;
 
     try {
-      const user = await UserModel.findOne({ email });
+      const user = await UserModel.findById(id);
 
       if (!user) {
         return res.status(400).json({
