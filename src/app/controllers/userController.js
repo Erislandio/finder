@@ -50,7 +50,7 @@ module.exports = {
         return res.status(200).json(newUser);
       }
 
-      return res.status(400).json({
+      return res.json({
         error: true,
         message: "User already registered"
       });

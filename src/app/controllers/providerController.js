@@ -61,7 +61,7 @@ module.exports = {
         return res.status(201).json(newProvider);
       }
 
-      return res.status(400).json({
+      return res.json({
         error: true,
         message: "Provider already registered"
       });
