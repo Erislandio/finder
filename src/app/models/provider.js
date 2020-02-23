@@ -49,8 +49,10 @@ const ProviderSchema = new mongoose.Schema({
       "Moto Taxi",
       "Borracharia",
       "Outros",
-      "Manicure",
-      "Cabeleireiro"
+      "Manicure e pedicure",
+      "Cabeleireiro",
+      "Restaurante",
+      "Supermercado"
     ],
     required: true
   },
