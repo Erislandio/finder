@@ -1,7 +1,6 @@
 const { Router } = require("express");
 const router = Router();
 const multer = require("multer");
-
 const userController = require("../app/controllers/userController");
 const providerController = require("../app/controllers/providerController");
 const authController = require("../app/controllers/authController");
@@ -10,6 +9,7 @@ const searchProvider = require("../app/controllers/searchProvider");
 const multerConfig = require("../config/multer");
 const fileController = require("../app/controllers/fileController");
 const postController = require("../app/controllers/postController");
+const imageController = require("../app/controllers/imageController");
 
 router.get("/", (req, res) => {
   return res.send({
@@ -56,5 +56,14 @@ router.post(
   multer(multerConfig).single("file"),
   fileController.store
 );
+
+router.post(
+  "/image",
+  multer(multerConfig).single("file"),
+  imageController.store
+);
+
+router.get("/image", imageController.index);
+router.delete("/image", imageController.delete);
 
 module.exports = router;
