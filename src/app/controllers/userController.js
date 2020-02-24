@@ -144,5 +144,28 @@ module.exports = {
     } catch (error) {
       return res.status(500).json(error);
     }
+  },
+  async updateBanner(req, res) {
+    const { email, banner } = req.body;
+
+    try {
+      const user = UserModel.findOne({ email });
+      if (!user) {
+        return res.status(400).json({
+          error: true,
+          message: `User with email: ${email} not exists`
+        });
+      }
+
+      await user.update({
+        banner
+      });
+
+      const userUpdated = await UserModel.findOne({ email });
+
+      return res.status(200).json(userUpdated);
+    } catch (error) {
+      return res.status(500).json(error);
+    }
   }
 };

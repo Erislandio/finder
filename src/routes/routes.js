@@ -23,6 +23,7 @@ router.get("/user", userController.index);
 router.delete("/user", authMiddleware, userController.delete);
 router.patch("/user", authMiddleware, userController.update);
 router.patch("/user/image", authMiddleware, userController.updateImage);
+router.patch("/user/banner", authMiddleware, userController.updateBanner);
 
 // Provider
 router.post("/provider", providerController.store);
@@ -35,6 +36,11 @@ router.patch(
   providerController.updateBanner
 );
 router.patch("/provider/image", authMiddleware, providerController.updateImage);
+router.patch(
+  "/provider/banner",
+  authMiddleware,
+  providerController.updateBanner
+);
 
 // Buscar Provedores
 router.post("/search", authMiddleware, searchProvider.index);

@@ -175,5 +175,29 @@ module.exports = {
     } catch (error) {
       return res.status(500).json(error);
     }
+  },
+  async updateBanner(req, res) {
+    const { email, banner } = req.body;
+
+    try {
+      const provider = await ProviderModel.findOne({ email });
+
+      if (!provider) {
+        return res.status(400).json({
+          error: true,
+          message: `Provider: ${email} not found `
+        });
+      }
+
+      await provider.update({
+        banner
+      });
+
+      const providerUpdated = await ProviderModel.findOne({ email });
+
+      return res.status(201).json(providerUpdated);
+    } catch (error) {
+      return res.status(500).json(error);
+    }
   }
 };
