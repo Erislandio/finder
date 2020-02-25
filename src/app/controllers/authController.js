@@ -34,7 +34,8 @@ module.exports = {
 
       return res.json({
         user,
-        token: generateToken({ id: user.id })
+        token: generateToken({ id: user.id }),
+        provider: provider
       });
     } catch (error) {
       return res.json(error);
