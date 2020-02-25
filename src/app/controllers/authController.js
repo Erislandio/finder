@@ -12,31 +12,48 @@ function generateToken(params = {}) {
 
 module.exports = {
   async login(req, res) {
-    const { email, password, provider } = req.body;
+    const { email, password } = req.body;
 
     try {
-      const user = provider
-        ? await ProviderSchema.findOne({ email }).select("+password")
-        : await UserSchema.findOne({ email }).select("+password");
+      const user = await UserSchema.findOne({ email }).select("+password");
+      const provider = await ProviderSchema.findOne({ email }).select(
+        "+password"
+      );
 
-      if (!user) {
+      if (!user && !provider) {
         return res.json({
           error: true,
           message: `email: ${email} not exists`
         });
       }
 
-      if (!(await bcrypt.compare(password, user.password)))
-        return res.json({
-          error: true,
-          message: "Incorrect password"
-        });
+      if (provider) {
+        if (!(await bcrypt.compare(password, provider.password)))
+          return res.json({
+            error: true,
+            message: "Incorrect password"
+          });
 
-      return res.json({
-        user,
-        token: generateToken({ id: user.id }),
-        provider: provider
-      });
+        return res.json({
+          user: provider,
+          token: generateToken({ id: provider.id }),
+          provider: true
+        });
+      }
+
+      if (user) {
+        if (!(await bcrypt.compare(password, user.password)))
+          return res.json({
+            error: true,
+            message: "Incorrect password"
+          });
+
+        return res.json({
+          user,
+          token: generateToken({ id: user.id }),
+          provider: false
+        });
+      }
     } catch (error) {
       return res.json(error);
     }
