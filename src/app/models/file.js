@@ -11,7 +11,12 @@ const FileSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now
-  }
+  },
+  email: {
+    type: String,
+    lowercase: true
+  },
+  public_id: String
 });
 
 FileSchema.pre("save", function() {

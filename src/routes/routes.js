@@ -71,5 +71,15 @@ router.post(
 
 router.get("/image", imageController.index);
 router.delete("/image", imageController.delete);
+router.post(
+  "/image/v2",
+  multer(multerConfig).single("file"),
+  fileController.storeCloudinary
+);
+router.delete(
+  "/image/v2",
+  multer(multerConfig).single("file"),
+  fileController.storeCloudinary
+);
 
 module.exports = router;
