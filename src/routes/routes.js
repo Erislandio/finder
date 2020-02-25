@@ -57,32 +57,16 @@ router.delete("/provider/post", authMiddleware, postController.delete);
 router.post("/login", authController.login);
 
 router.post(
-  "/file",
+  "/image/v2/photo",
   authMiddleware,
   multer(multerConfig).single("file"),
-  fileController.store
+  fileController.storePhoto
 );
 
 router.post(
-  "/image",
+  "/image/v2/banner",
   multer(multerConfig).single("file"),
-  imageController.store
-);
-
-router.get("/image", imageController.index);
-router.delete("/image", imageController.delete);
-
-router.post(
-  "/image/v2",
-  authMiddleware,
-  multer(multerConfig).single("file"),
-  fileController.storeCloudinary
-);
-router.delete(
-  "/image/v2",
-  authMiddleware,
-  multer(multerConfig).single("file"),
-  fileController.storeCloudinary
+  fileController.storeBanner
 );
 
 module.exports = router;

@@ -1,6 +1,6 @@
 const cloudinary = require("cloudinary").v2;
 const File = require("../models/file");
-const User = require("../models/user");
+const Banner = require("../models/banner");
 
 cloudinary.config({
   cloud_name: "acct",
@@ -26,7 +26,7 @@ module.exports = {
 
     return res.json(file);
   },
-  async storeCloudinary(req, res) {
+  async storePhoto(req, res) {
     const { file } = req;
     const { email } = req.body;
 
@@ -68,6 +68,74 @@ module.exports = {
           }
 
           const newFile = await File.create({
+            name: image.original_filename,
+            size: image.bytes,
+            key: image.signature,
+            url: image.url,
+            email: email,
+            public_id: image.public_id
+          });
+
+          return res.status(201).json({
+            newFile
+          });
+        })
+        .catch(err => {
+          return res.json({
+            ok: false,
+            err
+          });
+        });
+    } catch (error) {
+      return res.json({
+        ok: false,
+        err,
+        error
+      });
+    }
+  },
+  async storeBanner(req, res) {
+    const { file } = req;
+    const { email } = req.body;
+
+    try {
+      cloudinary.uploader
+        .upload(file.path, { tags: "banner" })
+        .then(async image => {
+          const updated = await Banner.findOne({ email });
+
+          if (updated) {
+            const { public_id } = updated;
+
+            return cloudinary.uploader
+              .destroy(public_id)
+              .then(() => {
+                Banner.findOneAndDelete({ email }).then(async () => {
+                  const newFile = await Banner.create({
+                    name: image.original_filename,
+                    size: image.bytes,
+                    key: image.signature,
+                    url: image.url,
+                    email: email,
+                    public_id: image.public_id
+                  });
+
+                  return res.json({
+                    newFile,
+                    updated: true
+                  });
+                });
+              })
+              .catch(err => {
+                return res.json({
+                  error: true,
+                  message: "updated error",
+                  err
+                });
+              });
+          }
+
+          const newFile = await Banner.create({
             name: image.original_filename,
             size: image.bytes,
             key: image.signature,
