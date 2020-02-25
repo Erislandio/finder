@@ -176,28 +176,27 @@ module.exports = {
       return res.status(500).json(error);
     }
   },
-  async updateBanner(req, res) {
-    const { email, banner } = req.body;
+  async updateCoordinates(req, res) {
+    const { id, lon, lat } = req.body;
+
+    const location = {
+      type: "Point",
+      coordinates: [lon, lat]
+    };
 
     try {
-      const provider = await ProviderModel.findOne({ email });
+      ProviderModel.findByIdAndUpdate(id, {
+        location
+      }).then(async () => {
+        const newProvider = await ProviderModel.findById(id);
 
-      if (!provider) {
-        return res.status(400).json({
-          error: true,
-          message: `Provider: ${email} not found `
-        });
-      }
-
-      await provider.update({
-        banner
+        return res.status(201).json(newProvider);
       });
-
-      const providerUpdated = await ProviderModel.findOne({ email });
-
-      return res.status(201).json(providerUpdated);
     } catch (error) {
-      return res.status(500).json(error);
+      return res.status(500).json({
+        error: true,
+        message: `Server side error `
+      });
     }
   }
 };

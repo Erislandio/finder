@@ -41,6 +41,8 @@ router.patch(
   providerController.updateBanner
 );
 
+router.patch("/provider/coordinates", providerController.updateCoordinates);
+
 // Buscar Provedores
 router.post("/search", authMiddleware, searchProvider.index);
 router.post("/search/type", authMiddleware, searchProvider.searchByType);
@@ -64,6 +66,7 @@ router.post(
 
 router.post(
   "/image/v2/banner",
+  authMiddleware,
   multer(multerConfig).single("file"),
   fileController.storeBanner
 );
