@@ -2,10 +2,10 @@ const ProviderModel = require("../models/provider");
 
 module.exports = {
   async index(req, res) {
-    const { email } = req.body;
+    const { id } = req.query;
 
     try {
-      const provider = await ProviderModel.findOne({ email });
+      const provider = await ProviderModel.findById(id);
 
       if (!provider) {
         return res.status(400).json({
