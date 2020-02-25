@@ -9,7 +9,6 @@ const searchProvider = require("../app/controllers/searchProvider");
 const multerConfig = require("../config/multer");
 const fileController = require("../app/controllers/fileController");
 const postController = require("../app/controllers/postController");
-const imageController = require("../app/controllers/imageController");
 
 router.get("/", (req, res) => {
   return res.send({

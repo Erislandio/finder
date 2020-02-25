@@ -3,9 +3,9 @@ const File = require("../models/file");
 const Banner = require("../models/banner");
 
 cloudinary.config({
-  cloud_name: "acct",
-  api_key: "444224854531139",
-  api_secret: "YoJz67Kg17g4qJXRwqNwAEyUipU"
+  cloud_name: process.env.cloud_name || "acct",
+  api_key: process.env.api_key || "444224854531139",
+  api_secret: process.env.api_secret || "YoJz67Kg17g4qJXRwqNwAEyUipU"
 });
 
 module.exports = {
