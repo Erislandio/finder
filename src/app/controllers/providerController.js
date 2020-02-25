@@ -187,15 +187,24 @@ module.exports = {
     try {
       ProviderModel.findByIdAndUpdate(id, {
         location
-      }).then(async () => {
-        const newProvider = await ProviderModel.findById(id);
+      })
+        .then(async () => {
+          const newProvider = await ProviderModel.findById(id);
 
-        return res.status(201).json(newProvider);
-      });
+          return res.status(201).json(newProvider);
+        })
+        .catch(err => {
+          return res.status(500).json({
+            error: true,
+            message: `Server side error `,
+            err
+          });
+        });
     } catch (error) {
       return res.status(500).json({
         error: true,
-        message: `Server side error `
+        message: `Server side error `,
+        error
       });
     }
   }
