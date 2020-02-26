@@ -46,7 +46,10 @@ module.exports = {
         user: {
           name: user.name,
           lastname: user.lastname,
-          id: user._id
+          id: user._id,
+          image: user.image
+            ? user.image
+            : "https://www.landscapingbydesign.com.au/wp-content/uploads/2018/11/img-person-placeholder.jpg"
         },
         comment,
         title,
