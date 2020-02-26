@@ -27,6 +27,7 @@ router.patch("/user/banner", authMiddleware, userController.updateBanner);
 // Provider
 router.post("/provider", providerController.store);
 router.get("/provider", providerController.index);
+router.get("/providers", providerController.indexAll);
 router.delete("/provider", authMiddleware, providerController.delete);
 router.patch("/provider", authMiddleware, providerController.update);
 router.patch(

@@ -56,7 +56,8 @@ const ProviderSchema = new mongoose.Schema({
       "Pedreiro",
       "Encanador",
       "Carpinteiro",
-      "Pintor"
+      "Pintor",
+      "Mercearia"
     ],
     required: true
   },

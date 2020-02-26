@@ -20,6 +20,23 @@ module.exports = {
     }
   },
 
+  async indexAll(req, res) {
+    try {
+      const providers = await ProviderModel.find();
+
+      if (!providers.length) {
+        return res.status(400).json({
+          error: true,
+          message: `Providers:  not found `
+        });
+      }
+
+      return res.status(200).json(providers);
+    } catch (error) {
+      return res.status(500).json(error);
+    }
+  },
+
   async store(req, res) {
     const {
       name,
